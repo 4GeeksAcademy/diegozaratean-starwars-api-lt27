@@ -52,6 +52,27 @@ def get_users():
 
     return jsonify(results), 200
 
+@app.route('/teacher', methods=['POST'])
+def create_teachers():
+    # leer los datos del body del teacher
+    print("PPOST DE TEACHER TESTTTTTTT")
+    print(request)
+    print(request.get_json())
+    print(request.get_json()["name"])
+    print(request.get_json()["city"])    
+    # crear en teacher en la BD
+    new_teacher = Teacher(name= request.get_json()["name"],age = request.get_json()["age"],city=request.get_json()["city"])
+    db.session.add(new_teacher)
+    db.session.commit()
+    # unir
+    #
+    response_body = {
+        "msg": "Debo crear el teacher"
+    }
+    return jsonify(response_body), 200
+
+
+
 @app.route('/teacher', methods=['GET'])
 def get_teachers():
     all_teachers = Teacher.query.all()

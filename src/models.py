@@ -24,6 +24,7 @@ class Teacher(db.Model):
     name = db.Column(db.String(250), nullable=False)
     city = db.Column(db.String(250))    
     age = db.Column(db.Integer)        
+    courses = db.relationship('Course', backref='teacher', lazy=True)
 
     def __repr__(self):
         return '<Teacher %r>' % self.name
@@ -33,5 +34,23 @@ class Teacher(db.Model):
             "id": self.id,
             "name": self.name,
             'age': self.age
+            # do not serialize the password, its a security breach
+        }
+
+
+class Course(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(250), nullable=False)
+    description = db.Column(db.String(250))   
+    teacher_id = db.Column(db.Integer, db.ForeignKey('teacher.id'),
+        nullable=False) 
+
+    def __repr__(self):
+        return '<Course %r>' % self.name
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "description": self.description
             # do not serialize the password, its a security breach
         }
